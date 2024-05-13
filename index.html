@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI or Not?</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <h1>AI or Not?</h>
+        <div id="image-container">
+            <img id="game-image" src="" alt="AI-Generated Image">
+        </div>
+        <div id="button-container">
+            <button id="yes-button">Yes</button>
+            <button id="no-button">No</button>
+        </div>
+        <div id="lives-container">
+            Lives: <span id="lives">3</span>
+        </div>
+        <div id="score-container">
+            Score: <span id="score">0</span>
+        </div>
+        <div id="start-button-container">
+            <button id="start-button">Start Game</button>
+        </div>
+    </div>
+
+    <div id="about-section">
+        <h2>About the Game</h2>
+        <p>Can you guess whether an image was created by AI or not? Test your skills and challenge your friends!</p>
+    </div>
+
+    <div id="leaderboard-section">
+        <h2>Leaderboard</h2>
+        <ol id="leaderboard-list"></ol>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
