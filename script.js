@@ -91,6 +91,6 @@ submitScoreButton.addEventListener('click', () => {
 });
 
 // Populate the images array with all image file names
-const imageFiles = ['image1.jpg', 'image2.jpg', ...]; // Add your image file names here
+const imageFiles = ['0.jpg', '1.jpg']; // Add your image file names here
 images.push(...imageFiles.map(file => `yes/${file}`));
 images.push(...imageFiles.map(file => `no/${file}`));
