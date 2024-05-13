@@ -7,6 +7,8 @@ const livesContainer = document.getElementById('lives');
 const scoreContainer = document.getElementById('score');
 const startButton = document.getElementById('start-button');
 const leaderboardList = document.getElementById('leaderboard-list');
+const yesButtonContainer = document.getElementById('yes-button-container');
+const noButtonContainer = document.getElementById('no-button-container');
 
 let lives = 3;
 let score = 0;
@@ -16,9 +18,14 @@ const noImagesFolder = 'images/no/';
 
 const leaderboard = [];
 
+let displayedImages = []; // Keep track of displayed images
+
 startButton.addEventListener('click', () => {
     gameContainer.style.display = 'block';
     startButton.style.display = 'none';
+    yesButtonContainer.style.display = 'block'; // Show buttons
+    noButtonContainer.style.display = 'block';
+
     loadImage();
 });
 
@@ -26,10 +33,20 @@ function loadImage() {
     const imageFolders = [yesImagesFolder, noImagesFolder];
     const randomFolder = imageFolders[Math.floor(Math.random() * imageFolders.length)];
     const imageFiles = getImageFiles(randomFolder);
-    const randomImage = imageFiles[Math.floor(Math.random() * imageFiles.length)];
 
-    gameImage.src = randomImage;
-    gameImage.alt = "AI-Generated Image";
+    // Filter out already displayed images
+    const availableImages = imageFiles.filter(image => !displayedImages.includes(image));
+
+    if (availableImages.length === 0) {
+        // If all images have been displayed, reset the displayedImages array
+        displayedImages = [];
+        loadImage(); // Try again
+    } else {
+        const randomImage = availableImages[Math.floor(Math.random() * availableImages.length)];
+        gameImage.src = randomImage;
+        gameImage.alt = "AI-Generated Image";
+        displayedImages.push(randomImage); // Add the displayed image to the list
+    }
 }
 
 function getImageFiles(folder) {
@@ -70,10 +87,12 @@ function gameOver() {
 
     leaderboardList.innerHTML = leaderboard.map(entry => `
         <li>${entry.name}: ${entry.score} (${entry.date.toLocaleDateString()})</li>
-    `).join('');
+    `).keepDisplayedImagesrt('');
 
     gameContainer.style.display = 'none';
     startButton.style.display = 'block';
+    yesButtonContainer.style.display = 'none'; // Hide buttons
+    noButtonContainer.style.display = 'none';
     lives = 3;
     score = 0;
 }
