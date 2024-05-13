@@ -7,62 +7,70 @@ body {
 }
 
 #game-container {
-    width: 80%;
+    max-width: 800px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
-    border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
+h1 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#start-container, #game-content, #leaderboard-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
 #image-container {
-    margin: 20px 0;
+    margin: 20px auto;
+    max-width: 600px;
 }
 
 #game-image {
     max-width: 100%;
-    height: auto;
-    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
 }
 
-#button-container {
-    display: flex;
-    justify-content: space-around;
-}
-
-button {
+#button-container button {
+    margin: 5px 10px;
     padding: 10px 20px;
     font-size: 16px;
+    cursor: pointer;
     border: none;
     background-color: #007bff;
     color: #fff;
-    cursor: pointer;
     border-radius: 5px;
 }
 
-button:hover {
-    background-color: #0056b3;
+#lives-container {
+    margin-top: 20px;
+    font-weight: bold;
 }
 
-#lives-container, #score-container {
-    margin: 10px 0;
-    font-size: 18px;
-}
-
-#start-button-container {
-    text-align: center;
-}
-
-#about-section, #leaderboard-section {
-    padding: 20px;
-}
-
-#leaderboard-list {
-    list-style: none;
-    padding: 0;
+#leaderboard-container {
+    text-align: left;
 }
 
 #leaderboard-list li {
+    list-style: none;
     margin: 5px 0;
-    font-size: 18px;
+    padding: 5px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+}
+
+#about {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+#about h2 {
+    text-align: center;
 }
