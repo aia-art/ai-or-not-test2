@@ -1,98 +1,96 @@
 const gameContainer = document.getElementById('game-container');
+const startContainer = document.getElementById('start-container');
+const startButton = document.getElementById('start-button');
+const gameContent = document.getElementById('game-content');
 const imageContainer = document.getElementById('image-container');
 const gameImage = document.getElementById('game-image');
 const yesButton = document.getElementById('yes-button');
 const noButton = document.getElementById('no-button');
-const livesContainer = document.getElementById('lives');
-const scoreContainer = document.getElementById('score');
-const startButton = document.getElementById('start-button');
+const livesContainer = document.getElementById('lives-container');
+const lives = document.getElementById('lives');
+const leaderboardContainer = document.getElementById('leaderboard-container');
 const leaderboardList = document.getElementById('leaderboard-list');
-const yesButtonContainer = document.getElementById('yes-button-container');
-const noButtonContainer = document.getElementById('no-button-container');
-
-let lives = 3;
-let score = 0;
+const playerNameInput = document.getElementById('player-name');
+const submitScoreButton = document.getElementById('submit-score');
 
 const yesImagesFolder = 'images/yes/';
 const noImagesFolder = 'images/no/';
-
-const leaderboard = [];
-
-let displayedImages = []; // Keep track of displayed images
+const images = [];
+let currentImageIndex = -1;
+let currentImageIsAI = null;
+let livesLeft = 3;
 
 startButton.addEventListener('click', () => {
-    gameContainer.style.display = 'block';
-    startButton.style.display = 'none';
-    yesButtonContainer.style.display = 'block'; // Show buttons
-    noButtonContainer.style.display = 'block';
-
-    loadImage();
+    startContainer.style.display = 'none';
+    gameContent.style.display = 'block';
+    loadRandomImage();
 });
 
-function loadImage() {
-    const imageFolders = [yesImagesFolder, noImagesFolder];
-    const randomFolder = imageFolders[Math.floor(Math.random() * imageFolders.length)];
-    const imageFiles = getImageFiles(randomFolder);
+yesButton.addEventListener('click', () => checkAnswer(true));
+noButton.addEventListener('click', () => checkAnswer(false));
 
-    // Filter out already displayed images
-    const availableImages = imageFiles.filter(image => !displayedImages.includes(image));
+function loadRandomImage() {
+    currentImageIndex = Math.floor(Math.random() * images.length);
+    currentImageIsAI = Math.random() < 0.5; // Randomly decide if the image is AI-generated or not
 
-    if (availableImages.length === 0) {
-        // If all images have been displayed, reset the displayedImages array
-        displayedImages = [];
-        loadImage(); // Try again
+    const imageFolder = currentImageIsAI ? yesImagesFolder : noImagesFolder;
+    const randomImage = images[currentImageIndex];
+
+    gameImage.src = `${imageFolder}${randomImage}`;
+    gameImage.alt = `AI-Generated Image: ${randomImage}`;
+}
+
+function checkAnswer(playerAnswer) {
+    const correctAnswer = currentImageIsAI;
+
+    if (playerAnswer === correctAnswer) {
+        gameImage.style.borderColor = 'green';
+        setTimeout(() => gameImage.style.borderColor = 'initial', 1000);
+        loadRandomImage();
     } else {
-        const randomImage = availableImages[Math.floor(Math.random() * availableImages.length)];
-        gameImage.src = randomImage;
-        gameImage.alt = "AI-Generated Image";
-        displayedImages.push(randomImage); // Add the displayed image to the list
+        livesLeft -= 1;
+        lives.textContent = livesLeft;
+
+        if (livesLeft === 0) {
+            gameContent.style.display = 'none';
+            leaderboardContainer.style.display = 'block';
+            playerNameInput.focus();
+        } else {
+            gameImage.style.borderColor = 'red';
+            setTimeout(() => {
+                gameImage.style.borderColor = 'initial';
+                loadRandomImage();
+            }, 1000);
+        }
     }
 }
 
-function getImageFiles(folder) {
-    return Array.from(document.querySelectorAll(`${folder}*.jpg`));
-}
+submitScoreButton.addEventListener('click', () => {
+    const playerName = playerNameInput.value.trim();
+    if (playerName) {
+        const date = new Date();
+        const newScore = {
+            date: date.toLocaleDateString(),
+            name: playerName,
+            score: 3 - livesLeft
+        };
 
-yesButton.addEventListener('click', () => {
-    const isAI = gameImage.src.includes(yesImagesFolder);
-    checkAnswer(isAI);
+        // Save the score to the leaderboard (JSON database)
+        // For simplicity, we'll just append the new score to the leaderboard array.
+        // In a real-world scenario, you would probably want to sort and limit the leaderboard.
+        leaderboardList.innerHTML += `<li>${newScore.date} - ${newScore.name}: ${newScore.score}</li>`;
+
+        // Reset the game
+        playerNameInput.value = '';
+        livesLeft = 3;
+        currentImageIndex = -1;
+        gameContent.style.display = 'block';
+        leaderboardContainer.style.display = 'none';
+        loadRandomImage();
+    }
 });
 
-noButton.addEventListener('click', () => {
-    const isAI = gameImage.src.includes(yesImagesFolder);
-    checkAnswer(!isAI);
-});
-
-function checkAnswer(isAI) {
-    if (isAI) {
-        score++;
-        scoreContainer.textContent = score;
-    } else {
-        lives--;
-        livesContainer.textContent = lives;
-    }
-
-    if (lives === 0) {
-        gameOver();
-    } else {
-        loadImage();
-    }
-}
-
-function gameOver() {
-    const name = prompt('Enter your name:');
-    leaderboard.push({ name, score, date: new Date() });
-    leaderboard.sort((a, b) => b.score - a.score);
-    leaderboard.splice(3);
-
-    leaderboardList.innerHTML = leaderboard.map(entry => `
-        <li>${entry.name}: ${entry.score} (${entry.date.toLocaleDateString()})</li>
-    `).keepDisplayedImagesrt('');
-
-    gameContainer.style.display = 'none';
-    startButton.style.display = 'block';
-    yesButtonContainer.style.display = 'none'; // Hide buttons
-    noButtonContainer.style.display = 'none';
-    lives = 3;
-    score = 0;
-}
+// Populate the images array with all image file names
+const imageFiles = ['image1.jpg', 'image2.jpg', ...]; // Add your image file names here
+images.push(...imageFiles.map(file => `yes/${file}`));
+images.push(...imageFiles.map(file => `no/${file}`));
