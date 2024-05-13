@@ -8,35 +8,34 @@
 </head>
 <body>
     <div id="game-container">
-        <h1>AI or Not?</h>
-        <div id="image-container">
-            <img id="game-image" src="" alt="AI-Generated Image">
-        </div>
-        <div id="button-container">
-            <button id="yes-button">Yes</button>
-            <button id="no-button">No</button>
-        </div>
-        <div id="lives-container">
-            Lives: <span id="lives">3</span>
-        </div>
-        <div id="score-container">
-            Score: <span id="score">0</span>
-        </div>
-        <div id="start-button-container">
+        <h1>AI or Not?</h1>
+        <div id="start-container" style="display: none;">
             <button id="start-button">Start Game</button>
         </div>
+        <div id="game-content" style="display: none;">
+            <div id="image-container">
+                <img id="game-image" src="" alt="AI-Generated Image">
+            </div>
+            <div id="button-container">
+                <button id="yes-button">Yes</button>
+                <button id="no-button">No</button>
+            </div>
+            <div id="lives-container">
+                Lives: <span id="lives">3</span>
+            </div>
+        </div>
+        <div id="leaderboard-container" style="display: none;">
+            <h2>Leaderboard</h2>
+            <ol id="leaderboard-list"></ol>
+            <label for="player-name">Your Name:</label>
+            <input type="text" id="player-name">
+            <button id="submit-score">Submit Score</button>
+        </div>
     </div>
-
-    <div id="about-section">
+    <div id="about">
         <h2>About the Game</h2>
-        <p>Can you guess whether an image was created by AI or not? Test your skills and challenge your friends!</p>
+        <p>Test your skills at distinguishing AI-generated art from human-created art! Can you guess whether an image is created by AI or not?</p>
     </div>
-
-    <div id="leaderboard-section">
-        <h2>Leaderboard</h2>
-        <ol id="leaderboard-list"></ol>
-    </div>
-
     <script src="script.js"></script>
 </body>
 </html>
